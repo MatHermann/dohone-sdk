@@ -4,11 +4,12 @@
   "type": "library",
   "description": "A PHP 5.4+ SDK for easily use Dohone payment API",
   "keywords": [
+    "cameroon",
     "dohone",
-    "sdk",
-    "payment",
-    "mobile",
-    "money"
+    "payment-integration",
+    "mobile-payments",
+    "php",
+    "sdk"
   ],
   "homepage": "https://github.com/mathermann/dohone-sdk",
   "license": "MIT",
