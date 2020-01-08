@@ -110,11 +110,4 @@ abstract class AbstractDohoneSDK
 
         return $this->parseDohoneResponse($output);
     }
-
-    /**
-     * @param TransactionInterface $transaction
-     * @param array $params
-     * @return array
-     */
-    public abstract function quote($transaction, $params);
 }

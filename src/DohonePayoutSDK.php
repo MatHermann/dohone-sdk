@@ -73,15 +73,14 @@ class DohonePayoutSDK extends AbstractDohoneSDK
 
     /**
      * @param TransactionInterface $transaction
-     * @param array $params
      * @return DohoneResponse
      */
-    public function quote($transaction, $params = ['mode' => 1])
+    public function quote($transaction)
     {
         return $this->request('cotation', [
             'amount' => $transaction->getTransactionAmount(),
             'devise' => $transaction->getTransactionCurrency(),
-            'mode' => $params['mode']
+            'mode' => $this->OPERATORS[$transaction->getTransactionOperator()]
         ]);
     }
 
@@ -90,10 +89,10 @@ class DohonePayoutSDK extends AbstractDohoneSDK
      * @param array $params
      * @return DohoneResponse
      */
-    public function transfer($transaction, $params = ['mode' => 1])
+    public function transfer($transaction)
     {
         $account = $this->getDohoneAccount();
-        $mode = $params['mode'];
+        $mode = $this->OPERATORS[$transaction->getTransactionOperator()];
         $amount = $transaction->getTransactionAmount();
         $devise = $transaction->getTransactionCurrency();
         $transID = $transaction->getTransactionRef();
