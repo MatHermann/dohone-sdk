@@ -9,10 +9,10 @@
 namespace Mathermann\DohoneSDK;
 
 
+use ArrayObject;
 use JsonSerializable;
-use Serializable;
 
-class DohoneResponse implements Serializable, JsonSerializable
+class DohoneResponse extends ArrayObject implements JsonSerializable
 {
     /**
      * @var boolean
@@ -42,13 +42,17 @@ class DohoneResponse implements Serializable, JsonSerializable
      * @var string
      */
     private $fullResponse;
+    /**
+     * @var array
+     */
+    private $properties = ['success', 'status', 'message', 'REF', 'fullResponse', 'cmd', 'needCFRMSMS'];
 
     /**
      * @param array $responseData
      */
     public function __construct($responseData = [])
     {
-        foreach (['success', 'status', 'message', 'REF', 'fullResponse', 'cmd', 'needCFRMSMS'] as $key)
+        foreach ($this->properties as $key)
             if (key_exists($key, $responseData))
                 $this->{$key} = $responseData[$key];
     }
@@ -152,6 +156,14 @@ class DohoneResponse implements Serializable, JsonSerializable
     }
 
     /**
+     * @return string
+     */
+    public function hasREF()
+    {
+        return !in_array($this->getREF(), [null, '']);
+    }
+
+    /**
      * @param string $REF
      * @return DohoneResponse
      */
@@ -213,5 +225,40 @@ class DohoneResponse implements Serializable, JsonSerializable
             'REF' => $this->getREF(),
             'fullResponse' => $this->getFullResponse()
         ];
+    }
+
+    /**
+     * @param mixed $index
+     * @return bool true if the requested index exists, otherwise false
+     */
+    public function offsetExists($index)
+    {
+        return in_array($index, $this->properties);
+    }
+
+    /**
+     * @param mixed $index
+     * @return mixed The value at the specified index or false.
+     */
+    public function offsetGet($index)
+    {
+        if ($this->offsetExists($index))
+            return $this->{$index};
+
+        if ($index === 'hasREF')
+            return $this->hasREF();
+
+        return false;
+    }
+
+    /**
+     * @param mixed $index
+     * @param mixed $value
+     * @return void
+     */
+    public function offsetSet($index, $value)
+    {
+        if ($this->offsetExists($index))
+            $this->{$index} = $value;
     }
 }
