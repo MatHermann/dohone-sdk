@@ -1,0 +1,30 @@
+{
+  "name": "mathermann/dohone-sdk",
+  "type": "library",
+  "description": "A PHP 5.4+ SDK for easily use Dohone payment API",
+  "keywords": [
+    "dohone",
+    "sdk",
+    "payment",
+    "mobile",
+    "money"
+  ],
+  "homepage": "https://github.com/mathermann/dohone-sdk",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Willy Hermann KOUOGANG KAMDEM",
+      "email": "wkouogangkamdem@gmail.com",
+      "homepage": "https://github.com/mathermann",
+      "role": "Computer Engineer"
+    }
+  ],
+  "require": {
+    "php": "^5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mathermann\\DohoneSDK\\": "src/"
+    }
+  }
+}
