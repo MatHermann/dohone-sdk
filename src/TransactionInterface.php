@@ -67,4 +67,9 @@ interface TransactionInterface
      * @return string
      */
     public function getCustomerCity();
+
+    /**
+     * @return string|null
+     */
+    public function getNotifyUrl();
 }

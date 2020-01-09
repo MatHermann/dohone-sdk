@@ -97,6 +97,11 @@ class DohoneSDK extends AbstractDohoneSDK
      */
     public function start($transaction, $params = ['OTP' => null])
     {
+        $notify_url = $this->getNotifyUrl();
+
+        if ($transaction->getNotifyUrl() !== null)
+            $notify_url = $transaction->getNotifyUrl();
+
         return $this->request('start', [
             'rN' => $transaction->getCustomerName(),
             'rT' => $transaction->getCustomerPhoneNumber(),
@@ -108,7 +113,7 @@ class DohoneSDK extends AbstractDohoneSDK
             'rMt' => $transaction->getTransactionAmount(),
             'rDvs' => $transaction->getTransactionCurrency(),
             'source' => $this->getDohoneAppName(),
-            'notifyPage' => $this->getNotifyUrl(),
+            'notifyPage' => $notify_url,
             'motif' => $transaction->getTransactionReason()
         ]);
     }

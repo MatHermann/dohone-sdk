@@ -99,8 +99,11 @@ class DohonePayoutSDK extends AbstractDohoneSDK
         $amount = $transaction->getTransactionAmount();
         $devise = $transaction->getTransactionCurrency();
         $transID = $transaction->getTransactionRef();
-
         $hash = md5($account . $mode . $amount . $devise . $transID . $this->getDohoneMerchantKey());
+        $notify_url = $this->getNotifyUrl();
+
+        if ($transaction->getNotifyUrl() !== null)
+            $notify_url = $transaction->getNotifyUrl();
 
         return $this->request('transfert', [
             'account' => $account,
@@ -113,7 +116,7 @@ class DohonePayoutSDK extends AbstractDohoneSDK
             'pays' => $transaction->getCustomerCountry(),
             'transID' => $transID,
             'hash' => $hash,
-            'notifyUrl' => $this->getNotifyUrl()
+            'notifyUrl' => $notify_url
         ]);
     }
 }
