@@ -54,23 +54,22 @@ class DohoneSDK extends AbstractDohoneSDK
     /**
      * @param string $res
      * @return DohoneResponse
+     * @throws InvalidDohoneResponseException
      */
     protected function parseDohoneResponse($res)
     {
-        $words = explode(' ', trim($res));
-        $status = $words[0]; // First word
+        $words = explode(' ', $res);
+        $cmd = count($words) > 1 ? $words[1] : null; // Second word
         $message = substr($res, strpos($res, ':') + 2);
         $refIndex = strpos($message, 'REF');
+        $needCFRMSMS = strpos($message, 'SMS') !== false;
+        $REF = $refIndex !== false ? substr($message, $refIndex + 5) : null;
 
-        return new DohoneResponse([
-            'success' => $status === 'OK',
-            'status' => $status,
-            'cmd' => count($words) > 1 ? $words[1] : null, // Second word or null
-            'message' => $message,
-            'needCFRMSMS' => strpos($message, 'SMS') !== false,
-            'REF' => $refIndex !== false ? substr($message, $refIndex + 5) : null,
-            'fullResponse' => $res
-        ]);
+        return parent::parseDohoneResponse($res)
+            ->setCmd($cmd)
+            ->setMessage($message)
+            ->setNeedCFRMSMS($needCFRMSMS)
+            ->setREF($REF);
     }
 
     /**

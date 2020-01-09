@@ -11,11 +11,11 @@ namespace Mathermann\DohoneSDK;
 
 abstract class AbstractDohoneSDK
 {
-    // Constants
+    // Overridable constants
     protected $BASE_URL;
     protected $OPERATORS;
 
-    // Attributes
+    // Properties
     protected $dohoneMerchantKey;
     protected $notifyUrl;
 
@@ -68,8 +68,23 @@ abstract class AbstractDohoneSDK
     /**
      * @param string $res
      * @return DohoneResponse
+     * @throws InvalidDohoneResponseException
      */
-    protected abstract function parseDohoneResponse($res);
+    protected function parseDohoneResponse($res)
+    {
+        if ($res === '')
+            throw new InvalidDohoneResponseException("Response body is either empty or contains only whitespaces");
+
+        $status = explode(' ', $res)[0]; // First word
+
+        if (!in_array($status, DohoneResponse::$STATUSES))
+            throw new InvalidDohoneResponseException("Can't get request status from response body.");
+
+        return new DohoneResponse([
+            'status' => $status,
+            'fullResponse' => $res
+        ]);
+    }
 
     /**
      * @param string $cmd
@@ -108,6 +123,6 @@ abstract class AbstractDohoneSDK
         // close curl resource to free up system resources
         curl_close($ch);
 
-        return $this->parseDohoneResponse($output);
+        return $this->parseDohoneResponse(trim($output));
     }
 }

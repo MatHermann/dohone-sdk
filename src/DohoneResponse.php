@@ -15,10 +15,6 @@ use JsonSerializable;
 class DohoneResponse extends ArrayObject implements JsonSerializable
 {
     /**
-     * @var boolean
-     */
-    private $success;
-    /**
      * @var string
      */
     private $status;
@@ -43,36 +39,22 @@ class DohoneResponse extends ArrayObject implements JsonSerializable
      */
     private $fullResponse;
     /**
-     * @var array
+     * @var array const
      */
-    private $properties = ['success', 'status', 'message', 'REF', 'fullResponse', 'cmd', 'needCFRMSMS'];
+    public static $PROPERTIES = ['status', 'message', 'REF', 'fullResponse', 'cmd', 'needCFRMSMS'];
+    /**
+     * @var array static const
+     */
+    public static $STATUSES = ['OK', 'KO', 'NO'];
 
     /**
      * @param array $responseData
      */
     public function __construct($responseData = [])
     {
-        foreach ($this->properties as $key)
+        foreach (self::$PROPERTIES as $key)
             if (key_exists($key, $responseData))
                 $this->{$key} = $responseData[$key];
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSuccess()
-    {
-        return $this->success;
-    }
-
-    /**
-     * @param bool $success
-     * @return DohoneResponse
-     */
-    public function setSuccess($success)
-    {
-        $this->success = $success;
-        return $this;
     }
 
     /**
@@ -81,6 +63,14 @@ class DohoneResponse extends ArrayObject implements JsonSerializable
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSuccess()
+    {
+        return $this->status === 'OK';
     }
 
     /**
@@ -222,6 +212,7 @@ class DohoneResponse extends ArrayObject implements JsonSerializable
             'cmd' => $this->getCmd(),
             'message' => $this->getMessage(),
             'needCFRMSMS' => $this->needCFRMSMS(),
+            'hasREF' => $this->hasREF(),
             'REF' => $this->getREF(),
             'fullResponse' => $this->getFullResponse()
         ];
@@ -233,7 +224,7 @@ class DohoneResponse extends ArrayObject implements JsonSerializable
      */
     public function offsetExists($index)
     {
-        return in_array($index, $this->properties);
+        return in_array($index, $this->PROPERTIES);
     }
 
     /**
@@ -244,6 +235,9 @@ class DohoneResponse extends ArrayObject implements JsonSerializable
     {
         if ($this->offsetExists($index))
             return $this->{$index};
+
+        if ($index === 'success')
+            return $this->isSuccess();
 
         if ($index === 'hasREF')
             return $this->hasREF();

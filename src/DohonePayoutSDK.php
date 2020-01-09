@@ -54,21 +54,18 @@ class DohonePayoutSDK extends AbstractDohoneSDK
     /**
      * @param string $res
      * @return DohoneResponse
+     * @throws InvalidDohoneResponseException
      */
     protected function parseDohoneResponse($res)
     {
-        $words = explode(' ', trim($res));
-        $status = $words[0]; // First word
-        $success = $status === 'OK';
+        $dohoneResponse = parent::parseDohoneResponse($res);
+
         $message = substr($res, strpos($res, '/') + 2);
 
-        return new DohoneResponse([
-            'success' => $success,
-            'status' => $status,
-            'message' => $message,
-            'REF' => $success ? $message : null,
-            'fullResponse' => $res
-        ]);
+        if ($dohoneResponse->isSuccess())
+            $dohoneResponse->setREF($message);
+
+        return $dohoneResponse->setMessage($message);
     }
 
     /**
