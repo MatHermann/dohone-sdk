@@ -82,7 +82,7 @@ class DohonePayoutSDK extends AbstractDohoneSDK
         return $this->request('cotation', [
             'amount' => $transaction->getTransactionAmount(),
             'devise' => $transaction->getTransactionCurrency(),
-            'mode' => $this->OPERATORS[$transaction->getTransactionOperator()]
+            'mode' => $this->getOperatorCodeFromSlug($transaction->getTransactionOperator())
         ]);
     }
 
@@ -95,7 +95,7 @@ class DohonePayoutSDK extends AbstractDohoneSDK
     public function transfer($transaction)
     {
         $account = $this->getDohoneAccount();
-        $mode = $this->OPERATORS[$transaction->getTransactionOperator()];
+        $mode = $this->getOperatorCodeFromSlug($transaction->getTransactionOperator());
         $amount = $transaction->getTransactionAmount();
         $devise = $transaction->getTransactionCurrency();
         $transID = $transaction->getTransactionRef();

@@ -30,6 +30,35 @@ abstract class AbstractDohoneSDK
     }
 
     /**
+     * @param string $slug
+     * @return int|null
+     */
+    public function getOperatorCodeFromSlug($slug)
+    {
+        if (array_key_exists($slug, $this->OPERATORS))
+            return $this->OPERATORS[$slug];
+
+        return null;
+    }
+
+    /**
+     * @param int $code
+     * @return string|null
+     */
+    public function getOperatorSlugFromCode($code)
+    {
+        /**
+         * @var string $slug
+         * @var int $_code
+         */
+        foreach ($this->OPERATORS as $slug => $_code)
+            if ($_code === $code)
+                return $slug;
+
+        return null;
+    }
+
+    /**
      * @return string
      */
     public function getDohoneMerchantKey()

@@ -82,7 +82,7 @@ class DohoneSDK extends AbstractDohoneSDK
     {
         return $this->request('cotation', [
             'rH' => $this->getDohoneMerchantKey(),
-            'rMo' => $this->OPERATORS[$transaction->getTransactionOperator()],
+            'rMo' => $this->getOperatorCodeFromSlug($transaction->getTransactionOperator()),
             'rMt' => $transaction->getTransactionAmount(),
             'rDvs' => $transaction->getTransactionCurrency(),
             'levelFeeds' => $params['mode']
@@ -108,7 +108,7 @@ class DohoneSDK extends AbstractDohoneSDK
             'rE' => $transaction->getCustomerEmail(),
             'rH' => $this->getDohoneMerchantKey(),
             'rI' => $transaction->getTransactionRef(),
-            'rMo' => $this->OPERATORS[$transaction->getTransactionOperator()],
+            'rMo' => $this->getOperatorCodeFromSlug($transaction->getTransactionOperator()),
             'rOTP' => $params['OTP'],
             'rMt' => $transaction->getTransactionAmount(),
             'rDvs' => $transaction->getTransactionCurrency(),
