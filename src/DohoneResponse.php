@@ -45,7 +45,7 @@ class DohoneResponse extends ArrayObject implements JsonSerializable
     /**
      * @var array static const
      */
-    public static $STATUSES = ['OK', 'KO', 'NO'];
+    public static $STATUSES = ['OK', 'KO', 'NO', 'ERROR'];
 
     /**
      * @param array $responseData

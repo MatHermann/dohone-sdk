@@ -58,6 +58,10 @@ class DohonePayoutSDK extends AbstractDohoneSDK
      */
     protected function parseDohoneResponse($res)
     {
+        // If response is a float number, add 'OK / ' before
+        if (preg_match('/^[+-]?[0-9]*\.?[0-9]+$/', $res))
+            $res = 'OK / ' . $res;
+
         $dohoneResponse = parent::parseDohoneResponse($res);
 
         $message = substr($res, strpos($res, '/') + 2);
