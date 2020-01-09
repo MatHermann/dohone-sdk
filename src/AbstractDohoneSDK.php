@@ -90,6 +90,7 @@ abstract class AbstractDohoneSDK
      * @param string $cmd
      * @param array $params
      * @return DohoneResponse
+     * @throws InvalidDohoneResponseException
      */
     protected final function request($cmd, $params)
     {

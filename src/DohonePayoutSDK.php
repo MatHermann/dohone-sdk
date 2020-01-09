@@ -71,6 +71,7 @@ class DohonePayoutSDK extends AbstractDohoneSDK
     /**
      * @param TransactionInterface $transaction
      * @return DohoneResponse
+     * @throws InvalidDohoneResponseException
      */
     public function quote($transaction)
     {
@@ -85,6 +86,7 @@ class DohonePayoutSDK extends AbstractDohoneSDK
      * @param TransactionInterface $transaction
      * @param array $params
      * @return DohoneResponse
+     * @throws InvalidDohoneResponseException
      */
     public function transfer($transaction)
     {

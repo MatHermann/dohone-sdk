@@ -76,6 +76,7 @@ class DohoneSDK extends AbstractDohoneSDK
      * @param TransactionInterface $transaction
      * @param array $params
      * @return DohoneResponse
+     * @throws InvalidDohoneResponseException
      */
     public function quote($transaction, $params = ['mode' => 0])
     {
@@ -92,6 +93,7 @@ class DohoneSDK extends AbstractDohoneSDK
      * @param TransactionInterface $transaction
      * @param array $params
      * @return DohoneResponse
+     * @throws InvalidDohoneResponseException
      */
     public function start($transaction, $params = ['OTP' => null])
     {
@@ -115,6 +117,7 @@ class DohoneSDK extends AbstractDohoneSDK
      * @param TransactionInterface $transaction
      * @param array $params
      * @return DohoneResponse
+     * @throws InvalidDohoneResponseException
      */
     public function confirmSMS($transaction, $params)
     {
@@ -127,6 +130,7 @@ class DohoneSDK extends AbstractDohoneSDK
     /**
      * @param TransactionInterface $transaction
      * @return DohoneResponse
+     * @throws InvalidDohoneResponseException
      */
     public function verify($transaction)
     {
