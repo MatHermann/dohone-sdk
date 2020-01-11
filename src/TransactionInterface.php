@@ -41,7 +41,7 @@ interface TransactionInterface
     /**
      * @return string
      */
-    public function getOperatorTransactionRef();
+    public function getDohoneTransactionRef();
 
     /**
      * @return string

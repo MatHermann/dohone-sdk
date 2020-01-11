@@ -16,16 +16,16 @@ abstract class AbstractDohoneSDK
     protected $OPERATORS;
 
     // Properties
-    protected $dohoneMerchantKey;
+    protected $merchantKey;
     protected $notifyUrl;
 
     /**
-     * @param string $dohoneMerchantKey (optional)
+     * @param string $merchantKey (optional)
      * @param string $notifyUrl (optional)
      */
-    public function __construct($dohoneMerchantKey = '', $notifyUrl = null)
+    public function __construct($merchantKey = '', $notifyUrl = null)
     {
-        $this->dohoneMerchantKey = $dohoneMerchantKey;
+        $this->merchantKey = $merchantKey;
         $this->notifyUrl = $notifyUrl;
     }
 
@@ -61,18 +61,18 @@ abstract class AbstractDohoneSDK
     /**
      * @return string
      */
-    public function getDohoneMerchantKey()
+    public function getMerchantKey()
     {
-        return $this->dohoneMerchantKey;
+        return $this->merchantKey;
     }
 
     /**
-     * @param string $dohoneMerchantKey
+     * @param string $merchantKey
      * @return AbstractDohoneSDK
      */
-    public function setDohoneMerchantKey($dohoneMerchantKey)
+    public function setMerchantKey($merchantKey)
     {
-        $this->dohoneMerchantKey = $dohoneMerchantKey;
+        $this->merchantKey = $merchantKey;
         return $this;
     }
 
@@ -155,4 +155,10 @@ abstract class AbstractDohoneSDK
 
         return $this->parseDohoneResponse(trim($output));
     }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public abstract function mapNotificationData($data);
 }

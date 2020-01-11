@@ -15,13 +15,13 @@ class DohoneSDK extends AbstractDohoneSDK
     protected $dohoneAppName;
 
     /**
-     * @param string $dohoneMerchantKey (optional)
+     * @param string $merchantKey (optional)
      * @param string $dohoneAppName (optional)
      * @param string $notifyUrl (optional)
      */
-    public function __construct($dohoneMerchantKey = '', $dohoneAppName = '', $notifyUrl = null)
+    public function __construct($merchantKey = '', $dohoneAppName = '', $notifyUrl = null)
     {
-        parent::__construct($dohoneMerchantKey, $notifyUrl);
+        parent::__construct($merchantKey, $notifyUrl);
 
         $this->dohoneAppName = $dohoneAppName;
         $this->BASE_URL = 'https://www.my-dohone.com/dohone/pay';
@@ -81,7 +81,7 @@ class DohoneSDK extends AbstractDohoneSDK
     public function quote($transaction, $params = ['mode' => 0])
     {
         return $this->request('cotation', [
-            'rH' => $this->getDohoneMerchantKey(),
+            'rH' => $this->getMerchantKey(),
             'rMo' => $this->getOperatorCodeFromSlug($transaction->getTransactionOperator()),
             'rMt' => $transaction->getTransactionAmount(),
             'rDvs' => $transaction->getTransactionCurrency(),
@@ -106,7 +106,7 @@ class DohoneSDK extends AbstractDohoneSDK
             'rN' => $transaction->getCustomerName(),
             'rT' => $transaction->getCustomerPhoneNumber(),
             'rE' => $transaction->getCustomerEmail(),
-            'rH' => $this->getDohoneMerchantKey(),
+            'rH' => $this->getMerchantKey(),
             'rI' => $transaction->getTransactionRef(),
             'rMo' => $this->getOperatorCodeFromSlug($transaction->getTransactionOperator()),
             'rOTP' => $params['OTP'],
@@ -143,7 +143,29 @@ class DohoneSDK extends AbstractDohoneSDK
             'rI' => $transaction->getTransactionRef(),
             'rMt' => $transaction->getTransactionAmount(),
             'rDvs' => $transaction->getTransactionCurrency(),
-            'idReqDoh' => $transaction->getOperatorTransactionRef()
+            'idReqDoh' => $transaction->getDohoneTransactionRef()
         ]);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function mapNotificationData($data)
+    {
+        $map = [
+            'rI' => 'transaction_ref',
+            'rMt' => 'transaction_amount',
+            'rDvs' => 'transaction_currency',
+            'mode' => 'transaction_operator',
+            'motif' => 'transaction_reason',
+            'idReqDoh' => 'dohone_transaction_ref',
+            'rH' => 'merchant_key',
+            'hash' => 'hash',
+        ];
+        foreach ($map as $key => $value)
+            $data[$value] = $data[$key];
+
+        return $data;
     }
 }

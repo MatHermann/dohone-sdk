@@ -15,13 +15,13 @@ class DohonePayoutSDK extends AbstractDohoneSDK
     protected $dohoneAccount;
 
     /**
-     * @param string $dohoneMerchantKey (optional)
+     * @param string $merchantKey (optional)
      * @param string $dohoneAccount (optional)
      * @param string $notifyUrl (optional)
      */
-    public function __construct($dohoneMerchantKey = '', $dohoneAccount = '', $notifyUrl = null)
+    public function __construct($merchantKey = '', $dohoneAccount = '', $notifyUrl = null)
     {
-        parent::__construct($dohoneMerchantKey, $notifyUrl);
+        parent::__construct($merchantKey, $notifyUrl);
 
         $this->dohoneAccount = $dohoneAccount;
         $this->BASE_URL = 'https://www.my-dohone.com/dohone/transfert';
@@ -99,7 +99,7 @@ class DohonePayoutSDK extends AbstractDohoneSDK
         $amount = $transaction->getTransactionAmount();
         $devise = $transaction->getTransactionCurrency();
         $transID = $transaction->getTransactionRef();
-        $hash = md5($account . $mode . $amount . $devise . $transID . $this->getDohoneMerchantKey());
+        $hash = md5($account . $mode . $amount . $devise . $transID . $this->getMerchantKey());
         $notify_url = $this->getNotifyUrl();
 
         if ($transaction->getNotifyUrl() !== null)
@@ -118,5 +118,28 @@ class DohonePayoutSDK extends AbstractDohoneSDK
             'hash' => $hash,
             'notifyUrl' => $notify_url
         ]);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function mapNotificationData($data)
+    {
+        $map = [
+            'transID' => 'transaction_ref',
+            'amount' => 'transaction_amount',
+            'devise' => 'transaction_currency',
+            'mode' => 'transaction_operator',
+            'status' => 'transaction_status',
+            'refTrans' => 'dohone_transaction_ref',
+            'nameDest' => 'customer_name',
+            'destination' => 'customer_phone_number',
+            'withdrawalMode' => 'withdrawal_mode',
+        ];
+        foreach ($map as $key => $value)
+            $data[$value] = $data[$key];
+
+        return $data;
     }
 }

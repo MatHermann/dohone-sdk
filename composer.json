@@ -1,6 +1,6 @@
 {
   "name": "mathermann/dohone-sdk",
-  "version": "1.4.1",
+  "version": "1.5",
   "type": "library",
   "description": "A PHP 5.4+ SDK for easily use Dohone payment API",
   "keywords": [
