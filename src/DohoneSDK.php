@@ -12,17 +12,20 @@ namespace Mathermann\DohoneSDK;
 class DohoneSDK extends AbstractDohoneSDK
 {
     // Attributes
+    protected $merchantKey;
     protected $dohoneAppName;
 
     /**
      * @param string $merchantKey (optional)
      * @param string $dohoneAppName (optional)
+     * @param string $hashCode (optional)
      * @param string $notifyUrl (optional)
      */
-    public function __construct($merchantKey = '', $dohoneAppName = '', $notifyUrl = null)
+    public function __construct($merchantKey = '', $dohoneAppName = '', $hashCode = '', $notifyUrl = null)
     {
-        parent::__construct($merchantKey, $notifyUrl);
+        parent::__construct($hashCode, $notifyUrl);
 
+        $this->merchantKey = $merchantKey;
         $this->dohoneAppName = $dohoneAppName;
         $this->BASE_URL = 'https://www.my-dohone.com/dohone/pay';
         $this->OPERATORS = [
@@ -31,6 +34,24 @@ class DohoneSDK extends AbstractDohoneSDK
             'DOHONE_EU' => 3,   // Express Union Mobile Money
             'DOHONE_TRANSFER' => 10 // Dohone Account Transfer
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getMerchantKey()
+    {
+        return $this->merchantKey;
+    }
+
+    /**
+     * @param string $merchantKey
+     * @return DohoneSDK
+     */
+    public function setMerchantKey($merchantKey)
+    {
+        $this->merchantKey = $merchantKey;
+        return $this;
     }
 
     /**
@@ -124,7 +145,7 @@ class DohoneSDK extends AbstractDohoneSDK
      * @return DohoneResponse
      * @throws InvalidDohoneResponseException
      */
-    public function confirmSMS($transaction, $params)
+    public function confirmSMS($transaction, $params = ['code' => null])
     {
         return $this->request('cfrmsms', [
             'rCS' => $params['code'],
@@ -164,8 +185,24 @@ class DohoneSDK extends AbstractDohoneSDK
             'hash' => 'hash',
         ];
         foreach ($map as $key => $value)
-            $data[$value] = $data[$key];
+            if (key_exists($key, $data))
+                $data[$value] = $data[$key];
 
         return $data;
+    }
+
+    /**
+     * @param array $notificationData
+     * @return boolean
+     */
+    public function checkHash($notificationData)
+    {
+        $dohone_transaction_ref = $notificationData['dohone_transaction_ref'];
+        $transaction_ref = $notificationData['transaction_ref'];
+        $transaction_amount = $notificationData['transaction_amount'];
+        $hash1 = md5($dohone_transaction_ref . $transaction_ref . $transaction_amount . $this->getHashCode());
+        $hash2 = md5($dohone_transaction_ref . $transaction_ref . intval($transaction_amount) . $this->getHashCode());
+
+        return in_array($notificationData['hash'], [$hash1, $hash2]);
     }
 }

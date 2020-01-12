@@ -15,13 +15,13 @@ class DohonePayoutSDK extends AbstractDohoneSDK
     protected $dohoneAccount;
 
     /**
-     * @param string $merchantKey (optional)
      * @param string $dohoneAccount (optional)
+     * @param string $hashCode (optional)
      * @param string $notifyUrl (optional)
      */
-    public function __construct($merchantKey = '', $dohoneAccount = '', $notifyUrl = null)
+    public function __construct($dohoneAccount = '', $hashCode = '', $notifyUrl = null)
     {
-        parent::__construct($merchantKey, $notifyUrl);
+        parent::__construct($hashCode, $notifyUrl);
 
         $this->dohoneAccount = $dohoneAccount;
         $this->BASE_URL = 'https://www.my-dohone.com/dohone/transfert';
@@ -99,7 +99,7 @@ class DohonePayoutSDK extends AbstractDohoneSDK
         $amount = $transaction->getTransactionAmount();
         $devise = $transaction->getTransactionCurrency();
         $transID = $transaction->getTransactionRef();
-        $hash = md5($account . $mode . $amount . $devise . $transID . $this->getMerchantKey());
+        $hash = md5($account . $mode . $amount . $devise . $transID . $this->getHashCode());
         $notify_url = $this->getNotifyUrl();
 
         if ($transaction->getNotifyUrl() !== null)
@@ -138,7 +138,8 @@ class DohonePayoutSDK extends AbstractDohoneSDK
             'withdrawalMode' => 'withdrawal_mode',
         ];
         foreach ($map as $key => $value)
-            $data[$value] = $data[$key];
+            if (key_exists($key, $data))
+                $data[$value] = $data[$key];
 
         return $data;
     }

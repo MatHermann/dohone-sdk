@@ -16,16 +16,16 @@ abstract class AbstractDohoneSDK
     protected $OPERATORS;
 
     // Properties
-    protected $merchantKey;
+    protected $hashCode;
     protected $notifyUrl;
 
     /**
-     * @param string $merchantKey (optional)
+     * @param string $hashCode (optional)
      * @param string $notifyUrl (optional)
      */
-    public function __construct($merchantKey = '', $notifyUrl = null)
+    public function __construct($hashCode = '', $notifyUrl = null)
     {
-        $this->merchantKey = $merchantKey;
+        $this->hashCode = $hashCode;
         $this->notifyUrl = $notifyUrl;
     }
 
@@ -61,18 +61,18 @@ abstract class AbstractDohoneSDK
     /**
      * @return string
      */
-    public function getMerchantKey()
+    public function getHashCode()
     {
-        return $this->merchantKey;
+        return $this->hashCode;
     }
 
     /**
-     * @param string $merchantKey
+     * @param string $hashCode
      * @return AbstractDohoneSDK
      */
-    public function setMerchantKey($merchantKey)
+    public function setHashCode($hashCode)
     {
-        $this->merchantKey = $merchantKey;
+        $this->hashCode = $hashCode;
         return $this;
     }
 
