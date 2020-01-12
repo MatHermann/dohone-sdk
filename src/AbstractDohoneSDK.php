@@ -135,6 +135,12 @@ abstract class AbstractDohoneSDK
         //fail on error
         curl_setopt($ch, CURLOPT_FAILONERROR, true);
 
+        //wait for connection indefinitely
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+
+        //execute indefinitely
+        curl_setopt($ch, CURLOPT_TIMEOUT, 0);
+
         //follow redirects
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
