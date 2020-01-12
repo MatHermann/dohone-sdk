@@ -8,11 +8,13 @@
     "dohone",
     "payment-integration",
     "mobile-payments",
-    "php",
     "sdk"
   ],
   "homepage": "https://github.com/mathermann/dohone-sdk",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mathermann/dohone-sdk/issues"
+  },
   "authors": [
     {
       "name": "Willy Hermann KOUOGANG KAMDEM",
