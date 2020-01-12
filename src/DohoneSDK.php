@@ -197,6 +197,9 @@ class DohoneSDK extends AbstractDohoneSDK
      */
     public function checkHash($notificationData)
     {
+        if ($notificationData['merchant_key'] !== $this->getMerchantKey())
+            return false;
+
         $dohone_transaction_ref = $notificationData['dohone_transaction_ref'];
         $transaction_ref = $notificationData['transaction_ref'];
         $transaction_amount = $notificationData['transaction_amount'];
