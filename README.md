@@ -190,7 +190,7 @@ try
 {
     /**
      * $transaction is an object of type Transaction defined above,
-     * $mode is exactly the same as "mode" in Dohone's documentation
+     * $mode is exactly the same as "levelFeeds" in Dohone's documentation
      */
     $response = $dohoneSdk->quote($transaction, ['mode' => $mode]);
     

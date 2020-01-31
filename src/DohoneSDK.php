@@ -142,15 +142,23 @@ class DohoneSDK extends AbstractDohoneSDK
     /**
      * @param TransactionInterface $transaction
      * @param array $params
+     * @param int $tries
      * @return DohoneResponse
      * @throws InvalidDohoneResponseException
      */
-    public function confirmSMS($transaction, $params = ['code' => null])
+    public function confirmSMS($transaction, $params = ['code' => null], $tries = 0)
     {
-        return $this->request('cfrmsms', [
-            'rCS' => $params['code'],
-            'rT' => $transaction->getCustomerPhoneNumber()
-        ]);
+        try {
+            return $this->request('cfrmsms', [
+                'rCS' => $params['code'],
+                'rT' => $transaction->getCustomerPhoneNumber()
+            ]);
+        } catch (InvalidDohoneResponseException $exception) {
+            if ($tries > 0)
+                return $this->confirmSMS($transaction, $params, $tries - 1);
+            else
+                throw $exception;
+        }
     }
 
     /**
