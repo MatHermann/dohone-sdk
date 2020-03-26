@@ -159,7 +159,7 @@ abstract class AbstractDohoneSDK
         // close curl resource to free up system resources
         curl_close($ch);
 
-        return $this->parseDohoneResponse(trim($output));
+        return $this->parseDohoneResponse(trim(utf8_encode($output)));
     }
 
     /**
